@@ -8,20 +8,27 @@
     </head>
     <body>
         <div id="shopping-list">
-            <h1>{{header.toLocaleUpperCase()}}</h1>
-            <div class="add-item-form">
-                <input type="text" v-model="newItem" v-on:keyup.enter="saveItem"/>
-                <button class="btn btn-primary" v-on:click="saveItem">Save Item</button>
+            <div class="header">
+                <h1>{{header.toLocaleUpperCase()}}</h1>
+                <button v-if="state === 'default'" class="btn btn-primary" @click="addItem">Add Item</button>
+                <button v-else class="btn btn-cancel" @click="cancelAdd">Cancel</button>
+            </div>
+            <div v-if="state === 'edit'"class="add-item-form">
+                <input type="text" v-model="newItem" @keyup.enter="saveItem" placeholder="Add a new item."/>
+                <button class="btn btn-primary" @click="saveItem">Save Item</button>
+                <button class="btn btn-primary" @click="buyItemsInCart">Buy Items</button>
             </div>
             <ul>
                 <li v-for="item in items">{{item}}</li>
             </ul>
+            <div v-if="items.length === 0">Congratulations you've bought all your items.</div>
         </div>
         <script src="https://unpkg.com/vue"></script>
         <script>
             let shoppinglist = new Vue({
                 el: '#shopping-list',
                 data: {
+                    state: 'edit',
                     header: 'Shopping List App',
                     newItem: '',
                     items: [
@@ -34,6 +41,16 @@
                     saveItem: function() {
                         this.items.push(this.newItem);
                         this.newItem = '';
+                    },
+                    buyItemsInCart: function() {
+                        this.state = "default";
+                        this.items = [];
+                    },
+                    cancelAdd: function() {
+                        this.state = "default";
+                    },
+                    addItem: function() {
+                        this.state = "edit";
                     }
                 }
             })
