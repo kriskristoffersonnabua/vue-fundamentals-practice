@@ -19,7 +19,7 @@
                 <button class="btn btn-primary" @click="buyItemsInCart" :disabled="items.length === 0">Buy Items</button>
             </div>
             <ul>
-                <li :class="{strikeout: item.purchased}" v-for="item in items" @click="togglePurchase(item)">{{item.item}}</li>
+                <li :class="{strikeout: item.purchased}" v-for="item in reversedItems" @click="togglePurchase(item)">{{item.item}}</li>
             </ul>
             <div v-if="items.length === 0">Congratulations you've bought all your items.</div>
         </div>
@@ -45,6 +45,11 @@
                             purchased: false
                         },
                     ]
+                },
+                computed: {
+                    reversedItems: function() {
+                        return this.items.slice(0).reverse();
+                    }
                 },
                 methods: {
                     saveItem: function() {
