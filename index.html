@@ -19,7 +19,7 @@
                 <button class="btn btn-primary" @click="buyItemsInCart" :disabled="items.length === 0">Buy Items</button>
             </div>
             <ul>
-                <li v-for="item in items">{{item}}</li>
+                <li :class="{strikeout: item.purchased}" v-for="item in items" @click="togglePurchase(item)">{{item.item}}</li>
             </ul>
             <div v-if="items.length === 0">Congratulations you've bought all your items.</div>
         </div>
@@ -32,14 +32,23 @@
                     header: 'Shopping List App',
                     newItem: '',
                     items: [
-                        '10 party hats',
-                        '2 board games', 
-                        '20 cups'
+                        {
+                            item: '10 party hats',
+                            purchased: false
+                        },
+                        {
+                            item: '2 board games',
+                            purchased: true
+                        },
+                        {
+                            item: '20 cups',
+                            purchased: false
+                        },
                     ]
                 },
                 methods: {
                     saveItem: function() {
-                        !!this.newItem && this.items.push(this.newItem);
+                        !!this.newItem && this.items.push({ item: this.newItem, purchased: false });
                         this.newItem = '';
                     },
                     buyItemsInCart: function() {
@@ -48,6 +57,9 @@
                     },
                     changeState: function(newState) {
                         this.state = newState;
+                    },
+                    togglePurchase: function(item) {
+                        item.purchased = !item.purchased;
                     }
                 }
             })
