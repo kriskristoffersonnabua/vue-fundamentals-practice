@@ -9,6 +9,10 @@
     <body>
         <div id="shopping-list">
             <h1>{{header.toLocaleUpperCase()}}</h1>
+            <div class="add-item-form">
+                <input type="text" v-model="newItem" v-on:keyup.enter="items.push(newItem);newItem='';"/>
+                <button class="btn btn-primary" v-on:click="items.push(newItem); newItem = '';">Save Item</button>
+            </div>
             <ul>
                 <li v-for="item in items">{{item}}</li>
             </ul>
@@ -19,6 +23,7 @@
                 el: '#shopping-list',
                 data: {
                     header: 'Shopping List App',
+                    newItem: '',
                     items: [
                         'First Item',
                         'Second Item', 
