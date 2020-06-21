@@ -10,13 +10,13 @@
         <div id="shopping-list">
             <div class="header">
                 <h1>{{header.toLocaleUpperCase()}}</h1>
-                <button v-if="state === 'default'" class="btn btn-primary" @click="addItem">Add Item</button>
-                <button v-else class="btn btn-cancel" @click="cancelAdd">Cancel</button>
+                <button v-if="state === 'default'" class="btn btn-primary" @click="changeState('edit')">Add Item</button>
+                <button v-else class="btn btn-cancel" @click="changeState('default')">Cancel</button>
             </div>
             <div v-if="state === 'edit'"class="add-item-form">
                 <input type="text" v-model="newItem" @keyup.enter="saveItem" placeholder="Add a new item."/>
-                <button class="btn btn-primary" @click="saveItem">Save Item</button>
-                <button class="btn btn-primary" @click="buyItemsInCart">Buy Items</button>
+                <button class="btn btn-primary" @click="saveItem" v-bind:disabled="newItem.trim().length === 0">Save Item</button>
+                <button class="btn btn-primary" @click="buyItemsInCart" :disabled="items.length === 0">Buy Items</button>
             </div>
             <ul>
                 <li v-for="item in items">{{item}}</li>
@@ -32,25 +32,22 @@
                     header: 'Shopping List App',
                     newItem: '',
                     items: [
-                        'First Item',
-                        'Second Item', 
-                        'Third Item'
+                        '10 party hats',
+                        '2 board games', 
+                        '20 cups'
                     ]
                 },
                 methods: {
                     saveItem: function() {
-                        this.items.push(this.newItem);
+                        !!this.newItem && this.items.push(this.newItem);
                         this.newItem = '';
                     },
                     buyItemsInCart: function() {
                         this.state = "default";
                         this.items = [];
                     },
-                    cancelAdd: function() {
-                        this.state = "default";
-                    },
-                    addItem: function() {
-                        this.state = "edit";
+                    changeState: function(newState) {
+                        this.state = newState;
                     }
                 }
             })
